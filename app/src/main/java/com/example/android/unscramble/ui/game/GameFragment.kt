@@ -70,27 +70,6 @@ class GameFragment : Fragment() {
         // Setup a click listener for the Submit and Skip buttons.
         binding.submit.setOnClickListener { onSubmitWord() }
         binding.skip.setOnClickListener { onSkipWord() }
-        // Update the UI
-        viewModel.score.observe(
-            viewLifecycleOwner
-        ) { newScore ->
-            binding.score.text = getString(R.string.score, newScore)
-        }
-        // updateNextWordOnScreen()
-        //    observe the currentScrambledWord LiveData
-        viewModel.currentScrambledWord.observe(
-            viewLifecycleOwner
-        ) { newWord ->
-            binding.textViewUnscrambledWord.text = newWord
-        }
-        viewModel.currentWordCount.observe(
-            viewLifecycleOwner
-        ) { newWordCount ->
-            binding.wordCount.text = getString(
-                R.string.word_count, newWordCount,
-                MAX_NO_OF_WORDS
-            )
-        }
     }
 
 
@@ -99,7 +78,7 @@ class GameFragment : Fragment() {
      * restart the game.
      */
     private fun restartGame() {
-        viewModel.reinitializaData()
+        viewModel.reinitializeData()
         setErrorTextField(false)
 //        updateNextWordOnScreen()
     }
