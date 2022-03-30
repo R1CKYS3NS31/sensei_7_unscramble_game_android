@@ -62,20 +62,19 @@ class GameFragment : Fragment() {
         binding.submit.setOnClickListener { onSubmitWord() }
         binding.skip.setOnClickListener { onSkipWord() }
         // Update the UI
-//        updateNextWordOnScreen()
-        binding.score.text = getString(R.string.score, 0)
-        binding.wordCount.text = getString(
-            R.string.word_count, 0, MAX_NO_OF_WORDS
-        )
+        viewModel.score.observe(
+            viewLifecycleOwner
+        ) { newScore ->
+            binding.score.text = getString(R.string.score, newScore)
+        }
+        // updateNextWordOnScreen()
         //    observe the currentScrambledWord LiveData
         viewModel.currentScrambledWord.observe(
-            viewLifecycleOwner,{
-                newWord->binding.textViewUnscrambledWord.text = newWord
-            }
-        )
+            viewLifecycleOwner
+        ) { newWord ->
+            binding.textViewUnscrambledWord.text = newWord
+        }
     }
-
-
 
 
     /*
