@@ -62,19 +62,18 @@ class GameFragment : Fragment() {
         binding.submit.setOnClickListener { onSubmitWord() }
         binding.skip.setOnClickListener { onSkipWord() }
         // Update the UI
-        updateNextWordOnScreen()
+//        updateNextWordOnScreen()
         binding.score.text = getString(R.string.score, 0)
         binding.wordCount.text = getString(
             R.string.word_count, 0, MAX_NO_OF_WORDS
         )
+        //    observe the currentScrambledWord LiveData
+        viewModel.currentScrambledWord.observe(
+            viewLifecycleOwner,{
+                newWord->binding.textViewUnscrambledWord.text = newWord
+            }
+        )
     }
-
-
-
-    /*
-     * Skips the current word without changing the score.
-     * Increases the word count.
-     */
 
 
 
@@ -83,11 +82,10 @@ class GameFragment : Fragment() {
      * Re-initializes the data in the ViewModel and updates the views with the new data, to
      * restart the game.
      */
-
     private fun restartGame() {
         viewModel.reinitializaData()
         setErrorTextField(false)
-        updateNextWordOnScreen()
+//        updateNextWordOnScreen()
     }
 
     /*
@@ -113,9 +111,6 @@ class GameFragment : Fragment() {
     /*
      * Displays the next scrambled word on screen.
      */
-    private fun updateNextWordOnScreen() {
-        binding.textViewUnscrambledWord.text = viewModel.currentScrambledWord
-    }
 
     override fun onDetach() {
         super.onDetach()
@@ -128,7 +123,7 @@ class GameFragment : Fragment() {
     private fun showFinalScoreDialog() {
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(getString(R.string.congratulations))
-            .setMessage(getString(R.string.you_scored, viewModel.score))
+            .setMessage(getString(R.string.you_scored, viewModel.score.value))
             .setCancelable(false)
             .setNegativeButton(getString(R.string.exit)) { _, _ ->
                 exitGame()
@@ -150,33 +145,30 @@ class GameFragment : Fragment() {
         val playWord = binding.textInputEditText.text.toString()
         if (viewModel.isUserWordCorrect(playWord)) {
             setErrorTextField(false)
-            if (viewModel.nextWOrd()) {
-                updateNextWordOnScreen()
-            } else {
+            if (!viewModel.nextWOrd()) {
                 showFinalScoreDialog()
             }
         } else {
-            showFinalScoreDialog()
+            setErrorTextField(true)
         }
 
         if (viewModel.nextWOrd()) {
-            updateNextWordOnScreen()
+//            updateNextWordOnScreen()
         } else {
             showFinalScoreDialog()
         }
     }
 
     /*
-    * Skips the current word without changing the score.
-    */
+     * Skips the current word without changing the score.
+     * Increases the word count.
+     */
     private fun onSkipWord() {
         if (viewModel.nextWOrd()) {
             setErrorTextField(false)
-            updateNextWordOnScreen()
+//            updateNextWordOnScreen()
         } else {
             showFinalScoreDialog()
         }
     }
-
-
 }
