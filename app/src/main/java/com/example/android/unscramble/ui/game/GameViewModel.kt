@@ -55,11 +55,6 @@ class GameViewModel : ViewModel() {
         getNextWord()
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        Log.d("GameFragment", "GameViewModel destroyed!")
-    }
-
     /*
     * Gets a random word for the list of words and shuffles the letters in it.
     * Updates currentWord and currentScrambledWord with the next word.
